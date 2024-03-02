@@ -13,6 +13,12 @@ RUN npm install && npm run build
 # Use python:3.10 as the second stage
 FROM python:3.10 as python
 
+# Copy the script to the image
+COPY print_ip.sh /usr/local/bin/print_ip.sh
+
+# Make the script executable
+RUN chmod +x /usr/local/bin/print_ip.sh
+
 # Set the working directory to /app/backend
 WORKDIR /app
 
@@ -32,6 +38,11 @@ RUN cp staticfiles/index.html templates/
 
 # Expose port 8000
 EXPOSE 8000
+
+
+
+# Run the script when the container starts
+CMD ["/usr/local/bin/print_ip.sh"]
 
 # Run the Django app
 CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
