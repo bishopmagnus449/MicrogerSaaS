@@ -16,6 +16,8 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 
 git clone https://github.com/realSamy/MicrogerSaaS && cd MicrogerSaaS || exit 1
 
+clear
+
 sudo docker compose up -d
 
 chmod +x ./print_ip.sh
