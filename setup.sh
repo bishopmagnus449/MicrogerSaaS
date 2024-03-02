@@ -21,3 +21,4 @@ clear
 sudo docker compose up -d
 
 chmod +x ./print_ip.sh
+bash print_ip.sh
