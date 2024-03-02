@@ -25,7 +25,7 @@ SECRET_KEY = 'asdklhjg5746840*/-985+6++-#$hjaeorfjry1_5$@2j7a&-8idn*^3f9)$^1vab3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'localadmin']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 ASGI_APPLICATION = "MicrogerSaaS.asgi.application"
