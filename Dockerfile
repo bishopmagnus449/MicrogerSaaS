@@ -41,8 +41,5 @@ EXPOSE 8000
 
 
 
-# Run the script when the container starts
-CMD ["/usr/local/bin/print_ip.sh"]
-
-# Run the Django app
-CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
+# Show Ip and run the app
+CMD /usr/local/bin/print_ip.sh && python3 manage.py runserver 0.0.0.0:8000
