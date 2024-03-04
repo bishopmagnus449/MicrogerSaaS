@@ -18,7 +18,4 @@ git clone https://github.com/realSamy/MicrogerSaaS && cd MicrogerSaaS || exit 1
 
 clear
 
-sudo docker compose up -d
-
-chmod +x ./print_ip.sh
-bash print_ip.sh
+sudo docker compose up
