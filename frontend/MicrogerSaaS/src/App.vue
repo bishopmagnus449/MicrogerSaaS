@@ -71,6 +71,46 @@ export default {
     },
   }),
   methods: {
+    copyToClipboard(text: string, {target}) {
+      const input = target.closest('.field').querySelector('.input')
+      const button: HTMLButtonElement = target.closest('button')
+      const buttonContent = button.innerHTML
+      button.classList.add('is-loading')
+      try {
+        // Modern browsers (Chrome, Firefox, Edge, etc.)
+        navigator.clipboard.writeText(text).then(() => {}, (err) => {
+          console.error('Failed to copy text:', err);
+        });
+      } catch (err) {
+        // Older browsers (IE11, etc.)
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+          const successful = document.execCommand('copy');
+          const msg = successful ? 'Text copied to clipboard: ' + text : 'Failed to copy text.';
+          console.log(msg);
+        } catch (err) {
+          console.error('Failed to copy text:', err);
+          return
+        }
+
+        document.body.removeChild(textArea);
+      }
+
+      setTimeout(() => {
+        button.classList.remove('is-loading')
+        button.innerHTML = '<span class="is-size-7 is-family-code">Copied!</span>'
+        input.classList.add('is-success')
+        setTimeout(() => {
+          input.classList.remove('is-success')
+          button.innerHTML = buttonContent
+        }, 300)
+      }, 500)
+    },
     defaultSettings() {
       this.serverInfo = {
         ...this.serverInfo,
