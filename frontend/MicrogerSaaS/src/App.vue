@@ -54,6 +54,7 @@ export default {
       showDefaultSettings: false,
       finishedDeployment: false,
       showDeploymentInfo: false,
+      inProgress: false,
     },
     defaults: {
       database: {
@@ -150,6 +151,7 @@ export default {
       this.logs = [...this.logs, log];
     },
     submitForm() {
+      this.config.inProgress = true;
       axios.post('/api/deploy/', this.serverInfo).then(res => {
         if (res.data.status) {
           this.config.finishedDeployment = true
@@ -157,7 +159,9 @@ export default {
         } else {
           this.writeLog("Deployment failed due to error: " + res.data.error, 'danger')
         }
+        this.config.inProgress = false;
       })
+      this.config.inProgress = true;
     }
   },
   computed: {
@@ -290,7 +294,7 @@ export default {
               <button v-if="config.finishedDeployment" type="button" class="button is-link"
                       @click="config.showDeploymentInfo = true">Deployment Info
               </button>
-              <button v-else type="submit" class="button is-link">Deploy</button>
+              <button v-else type="submit" class="button is-link" :class="{'is-loading': config.inProgress}" :disabled="config.inProgress">Deploy</button>
             </div>
           </div>
         </form>
