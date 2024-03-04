@@ -214,16 +214,19 @@ export default {
               <input required class="input" v-model="serverInfo.username" type="text" placeholder="Username">
             </div>
           </div>
-          <div class="field">
-            <label class="label">Password
-              <font-awesome-icon class="is-clickable"
-                                 :icon="config.server.showPassword ? icons.faEye : icons.faEyeSlash"
-                                 @click="config.server.showPassword = !config.server.showPassword"/>
+          <label class="label">Password
             </label>
-            <div class="control is-flex">
+          <div class="field has-addons">
+
+            <div class="control is-flex is-flex-grow-1">
               <input required class="input" v-model="serverInfo.password"
                      :type="config.server.showPassword?'text':'password'"
                      placeholder="Password">
+            </div>
+            <div class="control">
+              <button class="button" type="button" @click="config.server.showPassword = !config.server.showPassword">
+                <font-awesome-icon :icon="config.server.showPassword ? icons.faEye : icons.faEyeSlash"/>
+              </button>
             </div>
             <p class="help is-danger is-hidden">This email is invalid</p>
           </div>
@@ -265,18 +268,18 @@ export default {
                     <input required class="input" v-model="serverInfo.app.username" type="text" placeholder="Username">
                   </div>
                 </div>
-                <div class="field">
-                  <label class="label">Password
-                    <font-awesome-icon class="is-clickable"
-                                       :icon="config.app.showPassword ? icons.faEye : icons.faEyeSlash"
-                                       @click="config.app.showPassword = !config.app.showPassword"/>
-                  </label>
-                  <div class="control is-flex">
+                <label class="label">Password</label>
+                <div class="field has-addons">
+                  <div class="control is-flex is-flex-grow-1">
                     <input required class="input" v-model="serverInfo.app.password"
                            :type="config.app.showPassword?'text':'password'"
                            placeholder="Password">
                   </div>
-                  <p class="help is-danger is-hidden">This email is invalid</p>
+                  <div class="control">
+                    <button class="button" type="button" @click="config.app.showPassword = !config.app.showPassword">
+                      <font-awesome-icon :icon="config.app.showPassword ? icons.faEye : icons.faEyeSlash" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -284,7 +287,10 @@ export default {
 
           <div class="field is-grouped is-justify-content-center">
             <div class="control">
-              <button type="submit" class="button is-link">Deploy</button>
+              <button v-if="config.finishedDeployment" type="button" class="button is-link"
+                      @click="config.showDeploymentInfo = true">Deployment Info
+              </button>
+              <button v-else type="submit" class="button is-link">Deploy</button>
             </div>
           </div>
         </form>
@@ -391,16 +397,17 @@ export default {
                              placeholder="Username">
                     </div>
                   </div>
-                  <div class="field">
-                    <label class="label">Password
-                      <font-awesome-icon class="is-clickable"
-                                         :icon="config.database.showPassword ? icons.faEye : icons.faEyeSlash"
-                                         @click="config.database.showPassword = !config.database.showPassword"/>
-                    </label>
-                    <div class="control is-flex">
+                  <label class="label">Password</label>
+                  <div class="field has-addons">
+                    <div class="control is-flex is-flex-grow-1">
                       <input required class="input" v-model="serverInfo.database.password"
                              :type="config.database.showPassword?'text':'password'"
                              placeholder="Password">
+                    </div>
+                    <div class="control">
+                      <button class="button" type="button" @click="config.database.showPassword = !config.database.showPassword">
+                        <font-awesome-icon :icon="config.database.showPassword ? icons.faEye : icons.faEyeSlash" />
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -427,16 +434,17 @@ export default {
                              placeholder="Username">
                     </div>
                   </div>
-                  <div class="field">
-                    <label class="label">Password
-                      <font-awesome-icon class="is-clickable"
-                                         :icon="config.broker.showPassword ? icons.faEye : icons.faEyeSlash"
-                                         @click="config.broker.showPassword = !config.broker.showPassword"/>
-                    </label>
-                    <div class="control is-flex">
+                  <label class="label">Password</label>
+                  <div class="field has-addons">
+                    <div class="control is-flex is-flex-grow-1">
                       <input required class="input" v-model="serverInfo.broker.password"
                              :type="config.broker.showPassword?'text':'password'"
                              placeholder="Password">
+                    </div>
+                    <div class="control">
+                      <button class="button" type="button" @click="config.broker.showPassword = !config.broker.showPassword">
+                        <font-awesome-icon :icon="config.broker.showPassword ? icons.faEye : icons.faEyeSlash" />
+                      </button>
                     </div>
                   </div>
                 </div>
