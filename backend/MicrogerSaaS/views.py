@@ -1,4 +1,5 @@
 import re
+from typing import Optional
 
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
@@ -82,7 +83,7 @@ class Deployment:
             12: self._restart_services,
         }
 
-    def start_setup(self):
+    def start_setup(self) -> tuple[bool, Optional[str]]:
         deployment_data = {
             "port": self.port,
             "user": self.user,
@@ -104,7 +105,7 @@ class Deployment:
         self._deployment, _ = models.Deployment.objects.update_or_create(defaults=deployment_data, host=self.host)
 
         if not self._verify_github_key():
-            return
+            return False, 'Provided github pat is invalid'
         self._create_ssh_connection()
 
         for stage in range(self._deployment.stage + 1, len(self.stage_functions) + 1):
@@ -121,9 +122,9 @@ class Deployment:
                     self._deployment.stage = stage
                     self._deployment.save()
                 else:
-                    _send_log('Installation failed due to previous error.', 'danger')
-                    return
+                    return False, 'Installation failed due to previous error.'
         _send_log('Installation completed.', 'success')
+        return True, None
 
     def _verify_github_key(self, key: str = None):
         key = key or self.github_pat
@@ -453,7 +454,7 @@ class NewDeploymentAPI(APIView):
     def post(self, request: Request):
         deployment = Deployment(request.data)
         try:
-            deployment.start_setup()
-            return Response({'status': True})
+            status, error = deployment.start_setup()
+            return Response({'status': status, 'error': error})
         except Exception as e:
             return Response({'status': False, 'error': str(e)})
