@@ -52,6 +52,8 @@ export default {
         showPassword: false,
       },
       showDefaultSettings: false,
+      finishedDeployment: false,
+      showDeploymentInfo: false,
     },
     defaults: {
       database: {
@@ -108,7 +110,14 @@ export default {
       this.logs = [...this.logs, log];
     },
     submitForm() {
-      axios.post('/api/deploy/', this.serverInfo)
+      axios.post('/api/deploy/', this.serverInfo).then(res => {
+        if (res.data.status) {
+          this.config.finishedDeployment = true
+          this.config.showDeploymentInfo = true
+        } else {
+          this.writeLog("Deployment failed due to error: " + res.data.error, 'danger')
+        }
+      })
     }
   },
   computed: {
@@ -244,6 +253,56 @@ export default {
         <div class="has-background-light box is-flex-grow-1 is-flex logger-container">
           <div ref="logger" id="logger" class="customScrollBar vertical is-flex-grow-1"></div>
         </div>
+      </div>
+    </div>
+    <div class="modal" :class="{'is-active': config.showDeploymentInfo}">
+      <div class="modal-background is-clickable"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Deployment Finished</p>
+          <button class="delete" aria-label="close" @click="config.showDeploymentInfo = false"></button>
+        </header>
+        <section class="modal-card-body">
+          <label class="label">Here is your login info:</label>
+          <label class="label">Admin panel</label>
+          <div class="field has-addons">
+            <div class="control is-flex-grow-1">
+              <span class="input has-text-grey">https://{{serverInfo.app.adminDomain}}/panel</span>
+            </div>
+            <div class="control">
+              <button class="button" @click="copyToClipboard(`https://${serverInfo.app.adminDomain}/panel`, $event)">
+                <font-awesome-icon :icon="icons.faCopy"/>
+              </button>
+            </div>
+          </div>
+          <label class="label">Username</label>
+          <div class="field has-addons">
+            <div class="control is-flex-grow-1">
+              <pre class="input has-text-grey">{{serverInfo.app.username}}</pre>
+            </div>
+            <div class="control">
+              <button class="button" @click="copyToClipboard(serverInfo.app.username, $event)">
+                <font-awesome-icon :icon="icons.faCopy"/>
+              </button>
+            </div>
+          </div>
+          <label class="label">Password</label>
+          <div class="field has-addons">
+            <div class="control is-flex-grow-1">
+              <pre class="input has-text-grey">{{serverInfo.app.password}}</pre>
+            </div>
+            <div class="control">
+              <button class="button" @click="copyToClipboard(serverInfo.app.password, $event)">
+                <font-awesome-icon :icon="icons.faCopy"/>
+              </button>
+            </div>
+          </div>
+
+        </section>
+        <footer class="modal-card-foot">
+          <a :href="`https://${serverInfo.app.adminDomain}/panel`" target="_blank" class="button is-link">Redirect To
+            Login Panel</a>
+        </footer>
       </div>
     </div>
     <div class="modal" :class="{'is-active': config.showDefaultSettings}">

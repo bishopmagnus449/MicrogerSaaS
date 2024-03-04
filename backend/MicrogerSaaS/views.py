@@ -122,7 +122,8 @@ class Deployment:
                     self._deployment.save()
                 else:
                     _send_log('Installation failed due to previous error.', 'danger')
-                    break
+                    return
+        _send_log('Installation completed.', 'success')
 
     def _verify_github_key(self, key: str = None):
         key = key or self.github_pat
