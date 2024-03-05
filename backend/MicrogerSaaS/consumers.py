@@ -6,16 +6,7 @@ class LogConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
         await self.accept()
         await self.channel_layer.group_add('log_group', self.channel_name)
-        print('Websocket connection established')
-
-    async def receive_json(self, content=None, **_):
-        log_message = content['text']
-        print(content)
-
-        await self.send_json({
-            'type': 'websocket.send',
-            'text': log_message + ' from server',
-        })
+        print('Logger Websocket connection established')
 
     async def log_message(self, message):
         await self.send_json({
@@ -25,7 +16,8 @@ class LogConsumer(AsyncJsonWebsocketConsumer):
         })
 
     async def disconnect(self, close_code):
-        print('Websocket Disconnected')
+        print('Logger Websocket Disconnected')
+
 
 class ProgressConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
