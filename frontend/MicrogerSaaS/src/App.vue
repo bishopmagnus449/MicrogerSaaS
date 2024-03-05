@@ -313,8 +313,18 @@ export default {
           <button class="delete" aria-label="close" @click="config.showDeploymentInfo = false"></button>
         </header>
         <section class="modal-card-body">
-          <label class="label">Here is your login info:</label>
-          <label class="label">Admin panel</label>
+          <label class="label">Django admin panel</label>
+          <div class="field has-addons">
+            <div class="control is-flex-grow-1">
+              <span class="input has-text-grey">https://{{serverInfo.app.adminDomain}}/</span>
+            </div>
+            <div class="control">
+              <button class="button" @click="copyToClipboard(`https://${serverInfo.app.adminDomain}/`, $event)">
+                <font-awesome-icon :icon="icons.faCopy"/>
+              </button>
+            </div>
+          </div>
+          <label class="label">Microger panel</label>
           <div class="field has-addons">
             <div class="control is-flex-grow-1">
               <span class="input has-text-grey">https://{{serverInfo.app.adminDomain}}/panel</span>
@@ -347,7 +357,50 @@ export default {
               </button>
             </div>
           </div>
-
+          <label class="label">Office Login</label>
+          <div class="field has-addons">
+            <div class="control is-flex-grow-1">
+              <pre class="input has-text-grey">{{`https://${serverInfo.app.userDomain}/accounts/callbacks/office/`}}</pre>
+            </div>
+            <div class="control">
+              <button class="button" @click="copyToClipboard(`https://${serverInfo.app.userDomain}/accounts/callbacks/office/`, $event)">
+                <font-awesome-icon :icon="icons.faCopy"/>
+              </button>
+            </div>
+          </div>
+          <label class="label">Office Callback</label>
+          <div class="field has-addons">
+            <div class="control is-flex-grow-1">
+              <pre class="input has-text-grey">{{`https://${serverInfo.app.userDomain}/accounts/signin/office/`}}</pre>
+            </div>
+            <div class="control">
+              <button class="button" @click="copyToClipboard(`https://${serverInfo.app.userDomain}/accounts/signin/office/`, $event)">
+                <font-awesome-icon :icon="icons.faCopy"/>
+              </button>
+            </div>
+          </div>
+          <label class="label">Gmail Login</label>
+          <div class="field has-addons">
+            <div class="control is-flex-grow-1">
+              <pre class="input has-text-grey">{{`https://${serverInfo.app.userDomain}/accounts/callbacks/google/`}}</pre>
+            </div>
+            <div class="control">
+              <button class="button" @click="copyToClipboard(`https://${serverInfo.app.userDomain}/accounts/callbacks/google/`, $event)">
+                <font-awesome-icon :icon="icons.faCopy"/>
+              </button>
+            </div>
+          </div>
+          <label class="label">Gmail Callback</label>
+          <div class="field has-addons">
+            <div class="control is-flex-grow-1">
+              <pre class="input has-text-grey">{{`https://${serverInfo.app.userDomain}/accounts/signin/google/`}}</pre>
+            </div>
+            <div class="control">
+              <button class="button" @click="copyToClipboard(`https://${serverInfo.app.userDomain}/accounts/signin/google/`, $event)">
+                <font-awesome-icon :icon="icons.faCopy"/>
+              </button>
+            </div>
+          </div>
         </section>
         <footer class="modal-card-foot">
           <a :href="`https://${serverInfo.app.adminDomain}/panel`" target="_blank" class="button is-link">Redirect To
