@@ -12,7 +12,8 @@ export default {
     showLogs: true,
     writerBusy: false,
     icons: icons,
-    currentProgress: undefined as number|undefined,
+    currentProgress: 0,
+    currentProgressShow: undefined as number|undefined,
     serverInfo: {
       host: '',
       port: 22,
@@ -78,6 +79,7 @@ export default {
 
       loggerSocket.onopen = async () => {
         this.config.inProgress = false;
+        this.currentProgressShow = undefined;
         await this.writeLog("Logger WebSocket connection opened.", 'primary')
       };
 
@@ -92,6 +94,7 @@ export default {
 
       loggerSocket.onclose = async () => {
         this.config.inProgress = true;
+        this.currentProgressShow = undefined;
         await this.writeLog("Logger WebSocket connection closed, reconnecting...", 'danger')
       };
     },
@@ -205,6 +208,16 @@ export default {
       return ['database', 'broker'].some(prop => !_.isEqual((this.serverInfo as any)[prop], (this.defaults as any)[prop]));
     }
   },
+  watch: {
+    async currentProgress(percentage: number, oldProgress: number) {
+      oldProgress = (oldProgress || 0)
+      let diff = percentage - oldProgress
+      for (let i =0; i <= diff*10; i++) {
+        this.currentProgressShow = ((oldProgress * 10) + i) / 10
+        await new Promise(resolve => setTimeout(resolve, 100/diff));
+      }
+    },
+  },
   async mounted() {
     await this.writeLog("Welcome to Microger SaaS.", 'primary')
     await this.writeLog("Connecting to logger WebSocket...", 'info')
@@ -311,7 +324,7 @@ export default {
           </div>
 
           <div class="field is-grouped is-justify-content-center">
-            <progress v-if="config.inProgress" class="progress is-link" max="100" :value="currentProgress"></progress>
+            <progress v-if="config.inProgress" class="progress is-link" max="100" :value="currentProgressShow"></progress>
             <div class="control" v-else>
               <button v-if="config.finishedDeployment" type="button" class="button is-link"
                       @click="config.showDeploymentInfo = true">Deployment Info
