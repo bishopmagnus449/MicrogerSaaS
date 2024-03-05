@@ -231,50 +231,54 @@ export default {
 <template>
   <div class="container p-4 is-flex-grow-1">
     <div class="columns">
-      <div class="column customScrollBar vertical h-90">
-        <form @submit.prevent="submitForm">
-          <div class="field">
-            <label class="label">Server IP</label>
-            <div class="control">
-              <input name="ip" autocomplete="false" required class="input" v-model="serverInfo.host" type="text"
-                     placeholder="Server IP">
-            </div>
+      <div class="column customScrollBar vertical h-90 is-flex-mobile is-flex-direction-column">
+        <form @submit.prevent="submitForm" class="is-flex is-flex-direction-column is-flex-grow-1 h-100">
+          <div v-if="config.inProgress" class="h-100 is-flex is-justify-content-center is-flex-grow-1 is-align-items-center">
+            <span class="is-size-1 is-family-monospace">{{ currentProgress }}%</span>
           </div>
-          <div class="field">
-            <label class="label">Server Port</label>
-            <div class="control">
-              <input autocomplete="false" required class="input" v-model="serverInfo.port" type="number"
-                     placeholder="Server Port">
+          <div v-else>
+            <div class="field">
+              <label class="label">Server IP</label>
+              <div class="control">
+                <input name="ip" autocomplete="false" required class="input" v-model="serverInfo.host" type="text"
+                       placeholder="Server IP">
+              </div>
             </div>
-          </div>
-          <div class="field">
-            <label class="label">Username</label>
-            <div class="control">
-              <input required class="input" v-model="serverInfo.username" type="text" placeholder="Username">
+            <div class="field">
+              <label class="label">Server Port</label>
+              <div class="control">
+                <input autocomplete="false" required class="input" v-model="serverInfo.port" type="number"
+                       placeholder="Server Port">
+              </div>
             </div>
-          </div>
-          <label class="label">Password
-            </label>
-          <div class="field has-addons">
+            <div class="field">
+              <label class="label">Username</label>
+              <div class="control">
+                <input required class="input" v-model="serverInfo.username" type="text" placeholder="Username">
+              </div>
+            </div>
+            <label class="label">Password
+              </label>
+            <div class="field has-addons">
 
-            <div class="control is-flex is-flex-grow-1">
-              <input required class="input" v-model="serverInfo.password"
-                     :type="config.server.showPassword?'text':'password'"
-                     placeholder="Password">
+              <div class="control is-flex is-flex-grow-1">
+                <input required class="input" v-model="serverInfo.password"
+                       :type="config.server.showPassword?'text':'password'"
+                       placeholder="Password">
+              </div>
+              <div class="control">
+                <button class="button" type="button" @click="config.server.showPassword = !config.server.showPassword">
+                  <font-awesome-icon :icon="config.server.showPassword ? icons.faEye : icons.faEyeSlash"/>
+                </button>
+              </div>
+              <p class="help is-danger is-hidden">This email is invalid</p>
             </div>
-            <div class="control">
-              <button class="button" type="button" @click="config.server.showPassword = !config.server.showPassword">
-                <font-awesome-icon :icon="config.server.showPassword ? icons.faEye : icons.faEyeSlash"/>
-              </button>
+            <div class="field">
+              <label class="label">Github Key</label>
+              <div class="control">
+                <input required class="input" v-model="serverInfo.github_key" type="text" placeholder="Github Key">
+              </div>
             </div>
-            <p class="help is-danger is-hidden">This email is invalid</p>
-          </div>
-          <div class="field">
-            <label class="label">Github Key</label>
-            <div class="control">
-              <input required class="input" v-model="serverInfo.github_key" type="text" placeholder="Github Key">
-            </div>
-          </div>
           <div>
             <header class="card-header is-align-items-center">
               <p class="card-header-title">
@@ -322,6 +326,7 @@ export default {
                 </div>
               </div>
             </div>
+          </div>
           </div>
 
           <div class="field is-grouped is-justify-content-center">
@@ -588,6 +593,10 @@ div#logger {
 
 .h-90 {
   min-height: 90vh;
+}
+
+.h-100 {
+  height: 100%;
 }
 
 /* Use the attribute selector to apply the color style */
