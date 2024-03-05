@@ -72,6 +72,28 @@ export default {
     },
   }),
   methods: {
+    async startLoggerWebsocket() {
+      const loggerSocket = new ReconnectingWebSocket(`ws://${window.location.host}/ws/logger/`);
+
+      loggerSocket.onopen = async () => {
+        this.config.inProgress = false;
+        await this.writeLog("Logger WebSocket connection opened.", 'primary')
+      };
+
+      loggerSocket.onmessage = async (event) => {
+        const data = JSON.parse(event.data)
+        await this.writeLog(data.log, data.color)
+      };
+
+      loggerSocket.onerror = async () => {
+        await this.writeLog("Logger WebSocket connection error", 'danger')
+      };
+
+      loggerSocket.onclose = async () => {
+        this.config.inProgress = true;
+        await this.writeLog("Logger WebSocket connection closed, reconnecting...", 'danger')
+      };
+    },
     copyToClipboard(text: string, {target}) {
       const input = target.closest('.field').querySelector('.input')
       const button: HTMLButtonElement = target.closest('button')
