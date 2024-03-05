@@ -104,10 +104,13 @@ export default {
       }
     },
     copyToClipboard(text: string, {target}) {
-      const input = target.closest('.field').querySelector('.input')
-      const button: HTMLButtonElement = target.closest('button')
+      const field: HTMLDivElement = target.closest('.field')
+      const input = field.querySelector('.input')
+      const button: HTMLButtonElement = field.querySelector('button')
       const buttonContent = button.innerHTML
-      button.classList.add('is-loading')
+      if (field) {
+        button.classList.add('is-loading')
+      }
       try {
         // Modern browsers (Chrome, Firefox, Edge, etc.)
         navigator.clipboard.writeText(text).then(() => {}, (err) => {
@@ -133,7 +136,8 @@ export default {
         document.body.removeChild(textArea);
       }
 
-      setTimeout(() => {
+      if(field) {
+        setTimeout(() => {
         button.classList.remove('is-loading')
         button.innerHTML = '<span class="is-size-7 is-family-code">Copied!</span>'
         input.classList.add('is-success')
@@ -142,6 +146,7 @@ export default {
           button.innerHTML = buttonContent
         }, 300)
       }, 500)
+      }
     },
     defaultSettings() {
       this.serverInfo = {
@@ -333,7 +338,7 @@ export default {
           <label class="label">Django admin panel</label>
           <div class="field has-addons">
             <div class="control is-flex-grow-1">
-              <span class="input has-text-grey">https://{{serverInfo.app.adminDomain}}/</span>
+              <span class="input has-text-grey" @click="copyToClipboard(`https://${serverInfo.app.adminDomain}/`, $event)">https://{{serverInfo.app.adminDomain}}/</span>
             </div>
             <div class="control">
               <button class="button" @click="copyToClipboard(`https://${serverInfo.app.adminDomain}/`, $event)">
@@ -344,7 +349,7 @@ export default {
           <label class="label">Microger panel</label>
           <div class="field has-addons">
             <div class="control is-flex-grow-1">
-              <span class="input has-text-grey">https://{{serverInfo.app.adminDomain}}/panel</span>
+              <span class="input has-text-grey" @click="copyToClipboard(`https://${serverInfo.app.adminDomain}/panel`, $event)">https://{{serverInfo.app.adminDomain}}/panel</span>
             </div>
             <div class="control">
               <button class="button" @click="copyToClipboard(`https://${serverInfo.app.adminDomain}/panel`, $event)">
@@ -355,7 +360,7 @@ export default {
           <label class="label">Username</label>
           <div class="field has-addons">
             <div class="control is-flex-grow-1">
-              <pre class="input has-text-grey">{{serverInfo.app.username}}</pre>
+              <pre class="input has-text-grey" @click="copyToClipboard(serverInfo.app.username, $event)">{{serverInfo.app.username}}</pre>
             </div>
             <div class="control">
               <button class="button" @click="copyToClipboard(serverInfo.app.username, $event)">
@@ -366,7 +371,7 @@ export default {
           <label class="label">Password</label>
           <div class="field has-addons">
             <div class="control is-flex-grow-1">
-              <pre class="input has-text-grey">{{serverInfo.app.password}}</pre>
+              <pre class="input has-text-grey" @click="copyToClipboard(serverInfo.app.password, $event)">{{serverInfo.app.password}}</pre>
             </div>
             <div class="control">
               <button class="button" @click="copyToClipboard(serverInfo.app.password, $event)">
@@ -377,7 +382,7 @@ export default {
           <label class="label">Office Login</label>
           <div class="field has-addons">
             <div class="control is-flex-grow-1">
-              <pre class="input has-text-grey">{{`https://${serverInfo.app.userDomain}/accounts/callbacks/office/`}}</pre>
+              <pre class="input has-text-grey" @click="copyToClipboard(`https://${serverInfo.app.userDomain}/accounts/callbacks/office/`, $event)">{{`https://${serverInfo.app.userDomain}/accounts/callbacks/office/`}}</pre>
             </div>
             <div class="control">
               <button class="button" @click="copyToClipboard(`https://${serverInfo.app.userDomain}/accounts/callbacks/office/`, $event)">
@@ -388,7 +393,7 @@ export default {
           <label class="label">Office Callback</label>
           <div class="field has-addons">
             <div class="control is-flex-grow-1">
-              <pre class="input has-text-grey">{{`https://${serverInfo.app.userDomain}/accounts/signin/office/`}}</pre>
+              <pre class="input has-text-grey" @click="copyToClipboard(`https://${serverInfo.app.userDomain}/accounts/signin/office/`, $event)">{{`https://${serverInfo.app.userDomain}/accounts/signin/office/`}}</pre>
             </div>
             <div class="control">
               <button class="button" @click="copyToClipboard(`https://${serverInfo.app.userDomain}/accounts/signin/office/`, $event)">
@@ -399,7 +404,7 @@ export default {
           <label class="label">Gmail Login</label>
           <div class="field has-addons">
             <div class="control is-flex-grow-1">
-              <pre class="input has-text-grey">{{`https://${serverInfo.app.userDomain}/accounts/callbacks/google/`}}</pre>
+              <pre class="input has-text-grey" @click="copyToClipboard(`https://${serverInfo.app.userDomain}/accounts/callbacks/google/`, $event)">{{`https://${serverInfo.app.userDomain}/accounts/callbacks/google/`}}</pre>
             </div>
             <div class="control">
               <button class="button" @click="copyToClipboard(`https://${serverInfo.app.userDomain}/accounts/callbacks/google/`, $event)">
@@ -410,7 +415,7 @@ export default {
           <label class="label">Gmail Callback</label>
           <div class="field has-addons">
             <div class="control is-flex-grow-1">
-              <pre class="input has-text-grey">{{`https://${serverInfo.app.userDomain}/accounts/signin/google/`}}</pre>
+              <pre class="input has-text-grey" @click="copyToClipboard(`https://${serverInfo.app.userDomain}/accounts/signin/google/`, $event)">{{`https://${serverInfo.app.userDomain}/accounts/signin/google/`}}</pre>
             </div>
             <div class="control">
               <button class="button" @click="copyToClipboard(`https://${serverInfo.app.userDomain}/accounts/signin/google/`, $event)">
