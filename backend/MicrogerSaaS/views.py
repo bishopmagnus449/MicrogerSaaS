@@ -28,6 +28,11 @@ def _send_log(log: str, color: str = 'grey'):
     async_to_sync(channel_layer.group_send)('log_group', {'type': 'log_message', 'message': log, 'color': color})
 
 
+def _send_progress(percentage: int):
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)('progress_group', {'type': 'progress', 'percentage': percentage})
+
+
 class Deployment:
     _connection: Connection
     _deployment: models.Deployment
@@ -82,8 +87,10 @@ class Deployment:
             11: self._register_domain_certs,
             12: self._restart_services,
         }
+        self.stage_progress = [5, 15, 35, 40, 45, 50, 70, 75, 80, 85, 90, 95, 100]
 
     def start_setup(self) -> tuple[bool, Optional[str]]:
+        _send_progress(0)
         deployment_data = {
             "port": self.port,
             "user": self.user,
@@ -112,6 +119,7 @@ class Deployment:
             stage_func = self.stage_functions.get(stage)
             if stage_func:
                 try:
+                    _send_progress(self.stage_progress[stage - 1])
                     success = stage_func()
                 except UnexpectedExit as e:
                     success = False
@@ -121,6 +129,7 @@ class Deployment:
                 if success:
                     self._deployment.stage = stage
                     self._deployment.save()
+                    _send_progress(self.stage_progress[stage])
                 else:
                     return False, 'Installation failed due to previous error.'
         _send_log('Installation completed.', 'success')

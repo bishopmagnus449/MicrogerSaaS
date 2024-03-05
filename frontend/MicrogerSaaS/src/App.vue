@@ -12,6 +12,7 @@ export default {
     showLogs: true,
     writerBusy: false,
     icons: icons,
+    currentProgress: undefined as number|undefined,
     serverInfo: {
       host: '',
       port: 22,
@@ -54,7 +55,7 @@ export default {
       showDefaultSettings: false,
       finishedDeployment: false,
       showDeploymentInfo: false,
-      inProgress: false,
+      inProgress: true,
     },
     defaults: {
       database: {
@@ -93,6 +94,14 @@ export default {
         this.config.inProgress = true;
         await this.writeLog("Logger WebSocket connection closed, reconnecting...", 'danger')
       };
+    },
+    async startProgressWebsocket() {
+      const progressSocket = new ReconnectingWebSocket(`ws://${window.location.host}/ws/progress/`);
+
+      progressSocket.onmessage = async (event) => {
+        const data: {percentage: number} = JSON.parse(event.data)
+        this.currentProgress = data.percentage
+      }
     },
     copyToClipboard(text: string, {target}) {
       const input = target.closest('.field').querySelector('.input')
@@ -195,8 +204,7 @@ export default {
     await this.writeLog("Welcome to Microger SaaS.", 'primary')
     await this.writeLog("Connecting to logger WebSocket...", 'info')
     await this.startLoggerWebsocket()
-
-
+    await this.startProgressWebsocket()
   },
 }
 </script>
@@ -298,7 +306,8 @@ export default {
           </div>
 
           <div class="field is-grouped is-justify-content-center">
-            <div class="control">
+            <progress v-if="config.inProgress" class="progress is-link" max="100" :value="currentProgress"></progress>
+            <div class="control" v-else>
               <button v-if="config.finishedDeployment" type="button" class="button is-link"
                       @click="config.showDeploymentInfo = true">Deployment Info
               </button>
