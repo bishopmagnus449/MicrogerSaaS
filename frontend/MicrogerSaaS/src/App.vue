@@ -106,13 +106,14 @@ export default {
         this.currentProgress = data.percentage
       }
     },
-    copyToClipboard(text: string, {target}) {
-      const field: HTMLDivElement = target.closest('.field')
-      const input = field.querySelector('.input')
-      const button: HTMLButtonElement = field.querySelector('button')
-      const buttonContent = button.innerHTML
+    copyToClipboard(text: string, event: MouseEvent) {
+      const target = event.target as Element
+      const field = target!.closest('.field')
+      const input = field!.querySelector('.input')
+      const button = field!.querySelector('button')
+      const buttonContent = button!.innerHTML
       if (field) {
-        button.classList.add('is-loading')
+        button!.classList.add('is-loading')
       }
       try {
         // Modern browsers (Chrome, Firefox, Edge, etc.)
@@ -141,12 +142,12 @@ export default {
 
       if(field) {
         setTimeout(() => {
-        button.classList.remove('is-loading')
-        button.innerHTML = '<span class="is-size-7 is-family-code">Copied!</span>'
-        input.classList.add('is-success')
+        button!.classList.remove('is-loading')
+        button!.innerHTML = '<span class="is-size-7 is-family-code">Copied!</span>'
+        input!.classList.add('is-success')
         setTimeout(() => {
-          input.classList.remove('is-success')
-          button.innerHTML = buttonContent
+          input!.classList.remove('is-success')
+          button!.innerHTML = buttonContent
         }, 300)
       }, 500)
       }
