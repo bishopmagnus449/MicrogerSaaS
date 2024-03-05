@@ -194,10 +194,6 @@ export default {
   async mounted() {
     await this.writeLog("Welcome to Microger SaaS.", 'primary')
     await this.writeLog("Connecting to logger WebSocket...", 'info')
-    const loggerSocket = new ReconnectingWebSocket(`ws://${window.location.host}/ws/logger/`);
-    loggerSocket.onopen = async () => {
-      await this.writeLog("Logger WebSocket connection opened.", 'primary')
-    };
     await this.startLoggerWebsocket()
 
 
