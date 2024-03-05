@@ -198,19 +198,9 @@ export default {
     loggerSocket.onopen = async () => {
       await this.writeLog("Logger WebSocket connection opened.", 'primary')
     };
+    await this.startLoggerWebsocket()
 
-    loggerSocket.onmessage = async (event) => {
-      const data = JSON.parse(event.data)
-      await this.writeLog(data.log, data.color)
-    };
 
-    loggerSocket.onerror = async () => {
-      await this.writeLog("Logger WebSocket connection error", 'danger')
-    };
-
-    loggerSocket.onclose = async () => {
-      await this.writeLog("Logger WebSocket connection closed, reconnecting...", 'danger')
-    };
   },
 }
 </script>
