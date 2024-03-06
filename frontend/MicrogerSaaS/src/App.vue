@@ -57,6 +57,7 @@ export default {
       finishedDeployment: false,
       showDeploymentInfo: false,
       inProgress: true,
+      isLoading: true,
     },
     defaults: {
       database: {
@@ -79,6 +80,7 @@ export default {
 
       loggerSocket.onopen = async () => {
         this.config.inProgress = false;
+        this.config.isLoading = false;
         this.currentProgressShow = undefined;
         await this.writeLog("Logger WebSocket connection opened.", 'primary')
       };
@@ -94,6 +96,7 @@ export default {
 
       loggerSocket.onclose = async () => {
         this.config.inProgress = true;
+        this.config.isLoading = true;
         this.currentProgressShow = undefined;
         await this.writeLog("Logger WebSocket connection closed, reconnecting...", 'danger')
       };
@@ -192,6 +195,7 @@ export default {
     },
     submitForm() {
       this.config.inProgress = true;
+      this.config.isLoading = true;
       axios.post('/api/deploy/', this.serverInfo).then(res => {
         if (res.data.status) {
           this.config.finishedDeployment = true
@@ -211,6 +215,7 @@ export default {
   },
   watch: {
     async currentProgress(percentage: number, oldProgress: number) {
+      this.config.isLoading = false
       oldProgress = (oldProgress || 0)
       let diff = percentage - oldProgress
       for (let i =0; i <= diff*10; i++) {
@@ -234,7 +239,7 @@ export default {
       <div class="column customScrollBar vertical h-90 is-flex-mobile is-flex-direction-column">
         <form @submit.prevent="submitForm" class="is-flex is-flex-direction-column is-flex-grow-1 h-100">
           <div v-if="config.inProgress" class="h-100 is-flex is-justify-content-center is-flex-grow-1 is-align-items-center">
-            <span class="is-size-1 is-family-monospace">{{ currentProgress }}%</span>
+            <span class="is-size-1 is-family-monospace">{{ config.isLoading ? 'Loading...' : currentProgress + '%' }}</span>
           </div>
           <div v-else>
             <div class="field">
