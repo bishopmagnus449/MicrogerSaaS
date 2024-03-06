@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if ! command -v docker compose >/dev/null 2>&1; then
+if ! command -v docker >/dev/null 2>&1; then
   sudo apt-get update
   sudo apt-get install -y ca-certificates curl git
   sudo install -m 0755 -d /etc/apt/keyrings
