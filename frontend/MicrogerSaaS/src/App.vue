@@ -213,6 +213,11 @@ export default {
   computed: {
     defaultSettingsChanged() {
       return ['database', 'broker'].some(prop => !_.isEqual((this.serverInfo as any)[prop], (this.defaults as any)[prop]));
+    },
+    currentProgressString() {
+      if (!this.currentProgressShow) return '0%'
+      else if (this.currentProgressShow >= 100) return '100%'
+      return Number(this.currentProgressShow.toFixed(1)) + '%'
     }
   },
   watch: {
@@ -222,7 +227,7 @@ export default {
       if (this.currentProgress == 0) {
         this.currentProgressShow = 0
       }
-      while ((this.currentProgressShow || 0) < this.currentProgress) {
+      while (this.currentProgressShow < this.currentProgress) {
         let diff = this.currentProgress - (this.currentProgressShow || 0)
         let next = diff > 30 ? 0.5 : 0.1
         this.currentProgressShow += next
@@ -245,7 +250,7 @@ export default {
       <div class="column customScrollBar vertical h-90 is-flex-mobile is-flex-direction-column">
         <form @submit.prevent="submitForm" class="is-flex is-flex-direction-column is-flex-grow-1 h-100">
           <div v-if="config.inProgress" class="h-100 is-flex is-justify-content-center is-flex-grow-1 is-align-items-center">
-            <span class="is-size-1 is-family-monospace">{{ config.isLoading ? 'Loading...' : currentProgress + '%' }}</span>
+            <span class="is-size-1 is-family-monospace">{{ config.isLoading ? 'Loading...' : currentProgressString }}</span>
           </div>
           <div v-else>
             <div class="field">
