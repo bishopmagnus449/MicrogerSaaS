@@ -196,6 +196,8 @@ export default {
     submitForm() {
       this.config.inProgress = true;
       this.config.isLoading = true;
+      this.currentProgress = 0
+      this.currentProgressShow = undefined
       axios.post('/api/deploy/', this.serverInfo).then(res => {
         if (res.data.status) {
           this.config.finishedDeployment = true
@@ -217,6 +219,9 @@ export default {
     async currentProgress() {
       this.config.isLoading = false
       this.currentProgressShow = this.currentProgressShow || 0
+      if (this.currentProgress == 0) {
+        this.currentProgressShow = 0
+      }
       while ((this.currentProgressShow || 0) < this.currentProgress) {
         let diff = this.currentProgress - (this.currentProgressShow || 0)
         let next = diff > 30 ? 0.5 : 0.1
