@@ -226,7 +226,6 @@ export default {
     },
   },
   async mounted() {
-    window.app = this
     await this.writeLog("Welcome to Microger SaaS.", 'primary')
     await this.writeLog("Connecting to logger WebSocket...", 'info')
     await this.startLoggerWebsocket()
