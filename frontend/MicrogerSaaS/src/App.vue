@@ -214,17 +214,19 @@ export default {
     }
   },
   watch: {
-    async currentProgress(percentage: number, oldProgress: number) {
+    async currentProgress() {
       this.config.isLoading = false
-      oldProgress = (oldProgress || 0)
-      let diff = percentage - oldProgress
-      for (let i =0; i <= diff*10; i++) {
-        this.currentProgressShow = ((oldProgress * 10) + i) / 10
-        await new Promise(resolve => setTimeout(resolve, 100/diff));
+      this.currentProgressShow = this.currentProgressShow || 0
+      while ((this.currentProgressShow || 0) < this.currentProgress) {
+        let diff = this.currentProgress - (this.currentProgressShow || 0)
+        let next = diff > 30 ? 0.5 : 0.1
+        this.currentProgressShow += next
+        await new Promise(resolve => setTimeout(resolve, 100 * next));
       }
     },
   },
   async mounted() {
+    window.app = this
     await this.writeLog("Welcome to Microger SaaS.", 'primary')
     await this.writeLog("Connecting to logger WebSocket...", 'info')
     await this.startLoggerWebsocket()
