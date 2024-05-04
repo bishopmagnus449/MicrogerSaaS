@@ -426,6 +426,10 @@ server {{
 ln -s /etc/nginx/sites-available/microger /etc/nginx/sites-enabled
 rm -rf /etc/nginx/sites-enabled/default """
         self._connection.sudo(command)
+
+        command = """chown -R www-data:www-data /etc/letsencrypt/
+chmod -R 755 /etc/letsencrypt/"""
+        self._connection.sudo(command)
         return True
 
     def _restart_services(self):
