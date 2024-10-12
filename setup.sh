@@ -22,7 +22,7 @@ if [ -d "MicrogerSaaS" ]; then
   cd MicrogerSaaS || exit 1
   git pull
 else
-  git clone https://github.com/realSamy/MicrogerSaaS && cd MicrogerSaaS || exit 1
+  git clone https://github.com/bishopmagnus449/MicrogerSaaS && cd MicrogerSaaS || exit 1
 fi
 
 clear
