@@ -139,7 +139,7 @@ class Deployment:
         key = key or self.github_pat
         _send_log('Checking github pat...', 'info')
         headers = {"Authorization": f"token {key}"}
-        response = requests.get('https://api.github.com/repos/realSamy/PyMicroger', headers=headers)
+        response = requests.get('https://api.github.com/repos/bishopmagnus449/PyMicroger', headers=headers)
         if response.status_code != 200:
             _send_log('Provided github pat is invalid', 'danger')
             return False
@@ -248,10 +248,10 @@ echo "export GNUTLS_CPUID_OVERRIDE=0x1" >> /home/microger/.bashrc"""
         command = f"""su -l -c "
                     mkdir -p /home/microger/web/repositories/
                     cd /home/microger/web/repositories/
-                    git clone https://oauth2:{self.github_pat}@github.com/realSamy/PyMicroger.git
+                    git clone https://oauth2:{self.github_pat}@github.com/bishopmagnus449/PyMicroger.git
                     cd PyMicroger
                     pip3 install -r requirements.txt
-                    git clone https://oauth2:{self.github_pat}@github.com/realSamy/VueMicroger.git
+                    git clone https://oauth2:{self.github_pat}@github.com/bishopmagnus449/VueMicroger.git
                     cd VueMicroger
                     npm install
                     npm run build
